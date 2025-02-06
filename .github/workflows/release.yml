@@ -22,6 +22,11 @@ jobs:
       - name: Navigate to Pkg
         run: cd gbx-remote-go
 
+      - name: Debug
+        run: |
+          ls -la
+          pwd
+
       - name: Install dependencies
         run: go mod tidy
 
