@@ -1,4 +1,4 @@
-package models
+package request
 
 import (
 	"bytes"
@@ -8,8 +8,8 @@ import (
 
 // GenericRequest is a reusable request model.
 type GenericRequest struct {
-	Method  		string   `xml:"methodName"`
-	Params  		[]string `xml:"params>param>value"`
+	Method string   `xml:"methodName"`
+	Params []string `xml:"params>param>value"`
 }
 
 // NewGenericRequest creates a generic XML-RPC request.
@@ -42,14 +42,3 @@ func (r *GenericRequest) BuildPacket(handler uint32) ([]byte, error) {
 
 	return packet.Bytes(), nil
 }
-
-// NewListMethodsRequest creates a request for system.listMethods
-func NewListMethodsRequest() *GenericRequest {
-	return NewGenericRequest("system.listMethods")
-}
-
-// NewGetStatusRequest creates a request for GetStatus
-func NewGetStatusRequest() *GenericRequest {
-	return NewGenericRequest("GetStatus")
-}
-

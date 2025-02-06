@@ -2,19 +2,30 @@ package transport
 
 import (
 	"encoding/binary"
+	"encoding/xml"
 	"fmt"
 	"log"
 	"net"
 
-	"github.com/Nixotica/GbxRemoteGo/models"
+	"github.com/Nixotica/GbxRemoteGo/internal/request"
 )
 
+// parseXMLResponse unmarshals the XML response into the provided response struct.
+func parseXMLResponse[T any](responseData []byte, responseStruct *T) (*T, error) {
+	err := xml.Unmarshal(responseData, responseStruct)
+	if err != nil {
+		return nil, err
+	}
+
+	return responseStruct, nil
+}
+
 // SendXMLRPCRequest sends an XML-RPC request and unmarshals the response into the given response struct.
-func SendXMLRPCRequest[T any](conn net.Conn, request models.GenericRequest, responseStruct *T) (*T, error) {
+func SendXMLRPCRequest[T any](conn net.Conn, request request.GenericRequest, responseStruct *T) (*T, error) {
 	log.Println("Making request to server:", request)
-	
+
 	// Construct packet
-	handler := GetNextHandler()
+	handler := getNextHandler()
 	packetBytes, err := request.BuildPacket(handler)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build packet: %v", err)
@@ -44,7 +55,7 @@ func SendXMLRPCRequest[T any](conn net.Conn, request models.GenericRequest, resp
 	}
 
 	// Parse response XML into provided response struct
-	parsedResponse, err := models.ParseXMLResponse(responseData, responseStruct)
+	parsedResponse, err := parseXMLResponse(responseData, responseStruct)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse response XML: %v", err)
 	}

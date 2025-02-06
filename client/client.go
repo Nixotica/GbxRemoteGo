@@ -5,9 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-
-	"github.com/Nixotica/GbxRemoteGo/models"
-	"github.com/Nixotica/GbxRemoteGo/transport"
 )
 
 // XMLRPCClient represents a GBXRemote XML-RPC client for Trackmania.
@@ -68,37 +65,3 @@ func (c *XMLRPCClient) validateHeader() error {
 	return nil
 }
 
-// ListMethods calls system.listMethods and returns available XML-RPC methods. 
-func (c *XMLRPCClient) ListMethods() (models.ListMethodsResponse, error) {
-	request := models.NewListMethodsRequest()
-	response := &models.ListMethodsResponse{}
-	response, err := transport.SendXMLRPCRequest(c.Conn, *request, response)
-	if err != nil {
-		return models.ListMethodsResponse{}, fmt.Errorf("failed to list methods: %v", err)
-	}
-	return *response, nil
-}
-
-// GetStatus calls GetStatus and returns the server status.
-func (c *XMLRPCClient) GetStatus() (models.GetStatusResponse, error) {
-	request := models.NewGetStatusRequest()
-	response := &models.GetStatusResponse{}
-	response, err := transport.SendXMLRPCRequest(c.Conn, *request, response)
-	if err != nil {
-		return models.GetStatusResponse{}, fmt.Errorf("failed to get status: %v", err)
-	}
-	return *response, nil
-}
-
-// GetStatusAsync calls GetStatus and returns a channel to the goroutine return the server status.
-func (c *XMLRPCClient) GetStatusAsync() chan Result[*models.GetStatusResponse] {
-	resultChan := make(chan Result[*models.GetStatusResponse], 1)
-
-	go func() {
-		status, err := c.GetStatus()
-		resultChan <- Result[*models.GetStatusResponse]{Value: &status, Err: err}
-		close(resultChan)
-	}()
-
-	return resultChan
-}
