@@ -3,10 +3,11 @@ package client
 import (
 	"encoding/binary"
 	"fmt"
-	"gbx-remote-go/models"
-	"gbx-remote-go/transport"
 	"log"
 	"net"
+
+	"github.com/Nixotica/GbxRemoteGo/models"
+	"github.com/Nixotica/GbxRemoteGo/transport"
 )
 
 // XMLRPCClient represents a GBXRemote XML-RPC client for Trackmania.

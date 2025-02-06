@@ -3,9 +3,10 @@ package transport
 import (
 	"encoding/binary"
 	"fmt"
-	"gbx-remote-go/models"
 	"log"
 	"net"
+
+	"github.com/Nixotica/GbxRemoteGo/models"
 )
 
 // SendXMLRPCRequest sends an XML-RPC request and unmarshals the response into the given response struct.

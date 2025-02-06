@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"gbx-remote-go/client"
 	"log"
 	"sync"
+
+	"github.com/Nixotica/GbxRemoteGo/client"
 )
 
 func main() {
