@@ -25,14 +25,16 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
 
-      - name: Build Binary
+      - name: Push Go Module Version
         run: |
-          mkdir -p dist
-          GOOS=linux GOARCH=amd64 go build -o dist/gbx-remote-go-linux-amd64 .
+          git fetch --tags
+          echo "Publishing Go module version: $(git describe --tags)"
+          go list -m github.com/Nixotica/GbxRemoteGo@$(git describe --tags)
 
       - name: Create GitHub Release
-        uses: softprops//action-gh-release@v2
+        uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
