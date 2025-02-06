@@ -12,10 +12,14 @@ import (
 
 // parseXMLResponse unmarshals the XML response into the provided response struct.
 func parseXMLResponse[T any](responseData []byte, responseStruct *T) (*T, error) {
+	log.Printf("parseXMLResponse: %s", string(responseData)) // TODO - remove for major versions
+
 	err := xml.Unmarshal(responseData, responseStruct)
 	if err != nil {
 		return nil, err
 	}
+
+	log.Printf("unmarshaled response: %+v", responseStruct) // TODO - remove for major versions
 
 	return responseStruct, nil
 }
@@ -59,8 +63,6 @@ func SendXMLRPCRequest[T any](conn net.Conn, request request.GenericRequest, res
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse response XML: %v", err)
 	}
-
-	log.Println("Received request from server:", parsedResponse)
 
 	return parsedResponse, nil
 }

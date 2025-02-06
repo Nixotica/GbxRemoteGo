@@ -1,10 +1,8 @@
 package client
 
 import (
-	"fmt"
-
-	"github.com/Nixotica/GbxRemoteGo/internal/transport"
 	"github.com/Nixotica/GbxRemoteGo/internal/request"
+	"github.com/Nixotica/GbxRemoteGo/internal/transport"
 )
 
 // ListMethodsResponse represents the structured response from system.listMethods
@@ -17,8 +15,5 @@ func (c *XMLRPCClient) ListMethods() (ListMethodsResponse, error) {
 	req := request.NewGenericRequest("system.listMethods")
 	res := &ListMethodsResponse{}
 	res, err := transport.SendXMLRPCRequest(c.Conn, *req, res)
-	if err != nil {
-		return ListMethodsResponse{}, fmt.Errorf("failed to list methods: %v", err)
-	}
-	return *res, nil
+	return *res, err
 }

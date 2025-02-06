@@ -64,4 +64,3 @@ func (c *XMLRPCClient) validateHeader() error {
 
 	return nil
 }
-
