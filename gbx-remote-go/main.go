@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gbx-remote-go/client"
 	"log"
+	"sync"
 )
 
 func main() {
@@ -30,4 +31,22 @@ func main() {
 		log.Fatalf("Error calling method: %v", err)
 	}
 	fmt.Println("Server Status:", getStatusResponse.Status.Code, getStatusResponse.Status.Name)
+
+	// Call GetStatus async
+	var wg sync.WaitGroup
+	wg.Add(1)
+	
+	getStatusChan := xmlRpcClient.GetStatusAsync()
+	go func() {
+		defer wg.Done()
+
+		result := <- getStatusChan
+		if result.Err != nil {
+			fmt.Println("Error calling GetStatusAsync:", result.Err)
+			return
+		}
+		fmt.Println("Server Status (async):", result.Value.Status.Code, result.Value.Status.Name)
+	}()
+
+	wg.Wait()
 }

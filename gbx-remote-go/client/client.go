@@ -18,6 +18,12 @@ type XMLRPCClient struct {
 	Handler uint32
 }
 
+// Result is a generic type for handling async responses.
+type Result[T any] struct {
+	Value T
+	Err   error
+}
+
 // NewClient intializes and connects to the server.
 func NewClient(host string, port int) (*XMLRPCClient, error) {
 	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%d", host, port))
@@ -81,4 +87,17 @@ func (c *XMLRPCClient) GetStatus() (models.GetStatusResponse, error) {
 		return models.GetStatusResponse{}, fmt.Errorf("failed to get status: %v", err)
 	}
 	return *response, nil
+}
+
+// GetStatusAsync calls GetStatus and returns a channel to the goroutine return the server status.
+func (c *XMLRPCClient) GetStatusAsync() chan Result[*models.GetStatusResponse] {
+	resultChan := make(chan Result[*models.GetStatusResponse], 1)
+
+	go func() {
+		status, err := c.GetStatus()
+		resultChan <- Result[*models.GetStatusResponse]{Value: &status, Err: err}
+		close(resultChan)
+	}()
+
+	return resultChan
 }
