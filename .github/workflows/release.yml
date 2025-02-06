@@ -19,6 +19,9 @@ jobs:
         with:
           go-version: '1.21'
 
+      - name: Navigate to Pkg
+        run: cd gbx-remote-go
+
       - name: Install dependencies
         run: go mod tidy
 
