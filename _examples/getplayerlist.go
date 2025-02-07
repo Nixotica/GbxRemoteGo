@@ -20,6 +20,8 @@ func main() {
 
 	fmt.Println("Players:")
 	for _, player := range res.Players {
-		fmt.Println("-", player)
+		fmt.Println("-", player.NickName)
+		fmt.Println("  Login -", player.Login)
+		fmt.Println("  PlayerId -", player.PlayerId)
 	}
 }

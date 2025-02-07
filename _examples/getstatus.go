@@ -19,7 +19,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("Server status:", res.Status.Code, res.Status.Name)
+	fmt.Println("Server status:", res.Code, res.Name)
 
 	// Call GetStatus async
 	var wg sync.WaitGroup
@@ -34,7 +34,7 @@ func main() {
 			panic(err)
 			return
 		}
-		fmt.Println("Server Status (async):", result.Value.Status.Code, result.Value.Status.Name)
+		fmt.Println("Server Status (async):", result.Value.Code, result.Value.Name)
 	}()
 
 	wg.Wait()
