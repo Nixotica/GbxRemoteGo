@@ -3,7 +3,6 @@ package transport
 import (
 	"encoding/binary"
 	"fmt"
-	"log"
 	"net"
 
 	"github.com/Nixotica/GbxRemoteGo/internal/request"
@@ -12,8 +11,6 @@ import (
 
 // SendXMLRPCRequest sends an XML-RPC request and unmarshals the response into the given response struct.
 func SendXMLRPCRequest[T response.GenericResponse](conn net.Conn, request request.GenericRequest, responseStruct T) (T, error) {
-	log.Println("Making request to server:", request)
-
 	// Construct packet
 	handler := getNextHandler()
 	packetBytes, err := request.BuildPacket(handler)

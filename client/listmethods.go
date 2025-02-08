@@ -12,7 +12,7 @@ type ListMethodsResponse struct {
 	Methods []string `xml:"params>param>value>array>data>value>string"`
 }
 
-// LisetMethodsResponse custom XML parsing logic
+// ListMethodsResponse custom XML parsing logic
 func (r *ListMethodsResponse) ParseXML(data []byte) error {
 	return xml.Unmarshal(data, &r)
 }
